@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
 
+    path('', views.landing, name = 'landing'),
     path('app/', views.scheduler, name = 'scheduler'),
     path('app/project/<slug>', views.projects, name = 'project'),
     path('add-project/', views.add_project, name='add_project'),
@@ -15,5 +16,6 @@ urlpatterns = [
     path('edit-task/<pk>', views.edit_task, name='edit_task'),
     path('app/project/edit-task/', views.edit_task, name='edit_task'),
     path('try-progress/', views.try_progress, name='try_progress'),
+    path('add-email-launch/', views.add_email_launch, name='add_email_launch'),
 ]
 

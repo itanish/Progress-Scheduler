@@ -1,5 +1,5 @@
 from django import forms
-from .models import user_project,project_task,project_module
+from .models import user_project,project_task,project_module, pre_launch_email
 
 class add_project_form(forms.ModelForm):
 
@@ -78,4 +78,17 @@ class add_task_form_modal(forms.ModelForm):
             'priority_task' : forms.Select(attrs={
                 'class' : 'form-control'
             }), 
+        }
+
+class pre_launch_email_form(forms.ModelForm):
+
+    class Meta:
+        model = pre_launch_email
+        fields = ['email']
+        widgets = {
+            'email' : forms.TextInput(attrs={
+                'class' : 'form-control emaillanding',
+                'placeholder': 'Email'
+            }), 
+
         }

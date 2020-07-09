@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import user_project, project_module, project_task
-from .forms import add_project_form, add_module_form, add_task_form, add_task_form_modal
+from .forms import add_project_form, add_module_form, add_task_form, add_task_form_modal, pre_launch_email_form
 from django.http import HttpResponseRedirect
 from django.db.models import Sum
 from django.template.defaulttags import register
@@ -28,6 +28,12 @@ classList = [
 @register.filter
 def random_css(a):
     return random.choice(classList)
+
+
+def landing(request):
+
+    return render(request, "scheduler/landing.html", {'email_form': pre_launch_email_form})
+
 
 
 @login_required
@@ -428,3 +434,13 @@ def edit_task(request, pk):
  
     # return render(request,"admindash/edit_items.html",context)
     return render(request, "scheduler/edit_task.html",context)
+
+
+def add_email_launch(request):
+    email_launch = pre_launch_email_form(request.POST)
+
+    if email_launch.is_valid():
+        print('Email added success')
+        email_launchsave = email_launch.save()
+    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
