@@ -1,0 +1,190 @@
+{% extends 'scheduler/base.html' %}
+{% load mytags %}
+
+    {% block content%}
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+        
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-white">ProgrezzBoard!!</h1>
+          {% comment %}
+          <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+        
+        {% endcomment %}
+      </div>
+        <!-- Content Row -->
+        <div class="row">
+
+          <!-- Earnings (Monthly) Card Example -->
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Tasks</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_task}}</div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-rocket fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1"> Total Completed Tasks</div>
+                    <div class="row no-gutters align-items-center">
+                      <div class="col-auto">
+                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{task_done}}</div>
+                      </div>
+                      <div class="col">
+                        <div class="progress progress-sm mr-2">
+                          <div class="progress-bar bg-success" role="progressbar" style="width: {{task_done_per}}%" aria-valuenow="{{task_done_per}}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total In Progess Tasks</div>
+                    <div class="row no-gutters align-items-center">
+                      <div class="col-auto">
+                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{task_inprogress}}</div>
+                      </div>
+                      <div class="col">
+                        <div class="progress progress-sm mr-2">
+                          <div class="progress-bar bg-info" role="progressbar" style="width: {{task_inprogress_per}}%" aria-valuenow="{{task_inprogress_per}}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending Requests Card Example -->
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Points earned today</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{points}}</div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-trophy fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Row -->
+        <div class="row">
+
+          <!-- Content Column -->
+          <div class="col">
+
+            <!-- Project Card Example -->
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Your Projects Progrezz Report</h6>
+              </div>
+              <div class="card-body">
+
+                {% for key,value in projectss.items%}
+                  <h4 class="small font-weight-bold">{{key}} <span class="float-right">{{value|floatformat:2}}%</span></h4>
+                  <div class="progress mb-4">
+                    <div class="progress-bar {{ compliment|random_css }}" role="progressbar" style="width: {{value}}%" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                {% endfor %}
+
+
+              </div>
+            </div>
+          </div>
+  
+        </div>
+
+
+        <!-- Content Row -->
+
+                  <!-- DataTales Example -->
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold text-primary">Priority Tasks</h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                          <thead>
+                            <tr>
+                              <th>Task Name</th>
+                              <th>Project</th>
+                              <th>Module</th>
+                              <th>Status</th>
+                              <th>Delete?</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for pr in priority_task%}
+                              <tr>
+                                <td id="task_name-{{pr.id}}">{{pr.task_name}}</td>
+                                <td>{{pr.module.project.project_name}}</td>
+                                <td>{{pr.module.module_name}}</td>
+                                <td contenteditable="True" data-status="{{pr.get_status_display}}" class="status" id="status-{{pr.id}}">
+                                  <span id="statustext-{{pr.id}}">{{pr.get_status_display}}</span>
+                                  <select id="mySelect-{{pr.id}}" onchange="updateTask('{{pr.id}}', '{{pr.module.id}}')" style="width: 19px;float: right;background-color: transparent; border: 0rem;">
+                                    <option>Change Status</option>
+                                    <option>Not Started</option>
+                                    <option>In Progress</option>
+                                    <option>Done</option>
+                                    <option>Cancel</option>
+                                </select>
+                                </td>
+                                <td>
+                                  <a href="{% url 'delete_task' pr.id %}" style="color: red;"><i class="material-icons" style="font-size:25px; padding-left: 20px;">
+                                    delete
+                                  </i></a>
+                                
+                                </td>
+                              </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+        
+        
+
+
+          
+      </div>
+      <!-- /.container-fluid -->
+
+    {% endblock content %}

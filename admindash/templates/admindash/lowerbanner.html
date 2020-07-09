@@ -1,0 +1,139 @@
+{% extends 'admindash/base_a.html' %}
+{% load static %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Banner</h1>
+  <p class="mb-4">All the images below will be shown in the mobile app and website on the front carousel. Use add button to add a new set of images
+    and replace the previous set or delete button to remove them</a>.</p>
+
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Banners</h6>
+    </div>
+    <br>
+    {% comment %} <div class="text-right" style="margin:auto; margin-right:5%">
+      <span style="float:center;">
+        <button align="right" data-toggle="modal" data-target="#myModal"
+          style="margin:auto;background-color: #2196f3;color:white" class="btn btn-large">
+          <i style="color:white" class="material-icons mdc-icon-button__icon">add_circle</i><strong> Add
+            Item</strong></button>
+      </span>
+    </div> {% endcomment %}
+
+    <div class="card-body">
+      <input class="form-control" id="myInput" type="text" placeholder="Search..">
+      <br>
+      <div class="table-responsive">
+        <table class="table table-bordered" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Image</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="myTable">
+            {% for i in banner_data %}
+            <tr>
+              <td>{{ i.id }}</td>
+              <td>{{ i.image2 }}</td>
+              <td>
+                <span style="float:left;">
+                    <button id="add-to-favorites" data-toggle="modal" data-target="#myModal-{{i.id}}" class="mdc-icon-button mdc-icon--raised" aria-label="Add to favorites"
+                      aria-pressed="false">
+                      {% comment %} <i
+                        class="material-icons mdc-icon-button__icon mdc-icon-button__icon--on">favorite</i>
+                      {% endcomment %}
+                      <i class="material-icons mdc-icon-button__icon" style="color:darkorange;">create</i>
+                    </button>
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Content-->
+  <div class="modal fade" id="myModal-1" role="dialog">
+    <div class="modal-dialog ">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 align="center" class="modal-title">Edit Image</h3>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'add_banner' 1 %}" class="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <label class="bmd-label-floating" for="uname">Image (Update Image):</label>
+              {{ register_form.image2 }}
+            </div>
+            <button type="submit" style="font-size:larger" class="btn btn-block btn-success"><i style="color:white"
+                class="material-icons mdc-icon-button__icon">add_to_photos</i> Update Image</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <h5></h5>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Modal Ends-->
+
+  <!-- Modal Content-->
+  <div class="modal fade" id="myModal-2" role="dialog">
+    <div class="modal-dialog ">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 align="center" class="modal-title">Edit Image</h3>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'add_banner' 2 %}" class="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <label class="bmd-label-floating" for="uname">Image (Update Image):</label>
+              {{ register_form.image2 }}
+            </div>
+            <button type="submit" style="font-size:larger" class="btn btn-block btn-success"><i style="color:white"
+                class="material-icons mdc-icon-button__icon">add_to_photos</i> Update Image</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <h5></h5>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Modal Ends-->
+
+</div>
+<!-- /.container-fluid -->
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
+{% endblock content %}

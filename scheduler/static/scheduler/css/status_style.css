@@ -1,0 +1,21 @@
+.status[data-status="postponed"]:after {
+    content : "This task was postponed.";
+    color : orange
+   }
+   
+   .status[data-status="to do"]:after {
+    content : "This task still has to be done.";
+    color : blue
+   }
+   
+   .status[data-status="Done"]:after {
+    background-color: green;
+   }
+   
+   .date { 
+    display : none 
+   }
+   
+   .status[data-status="done"] + .date {
+    display : block
+   }

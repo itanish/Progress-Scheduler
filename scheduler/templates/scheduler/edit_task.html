@@ -1,0 +1,31 @@
+{% extends 'scheduler/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <h2 align="center"> Edit Item !!! </h2>
+        <div class="card mb-3">
+               <div class="card-header" style="border-bottom:1px solid rgba(0, 0, 0, 0.22);">
+                <h4>
+                    <ol class="breadcrumb" align="center" style="display:block;">
+                        <li class="breadcrumb-item">
+                            <a href="#"><b>Edit Details</b></a>
+                        </li>
+                    </ol>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'edit_task' form_id %}" class="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {{ form|crispy }}
+                    </br>
+                        <button type="submit" style="font-size:larger" class="btn btn-block btn-success"><i style="color:white" class="material-icons mdc-icon-button__icon">add_to_photos</i> Edit Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+{% endblock content %}

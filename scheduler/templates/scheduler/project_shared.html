@@ -1,0 +1,263 @@
+{% extends 'scheduler/base.html' %}
+
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+    {% block content%}
+
+    <!-- <link href="{% static 'scheduler/css/progress_custom.css'%}" rel="stylesheet"> -->
+
+    <style>
+
+.navbar {
+    margin-bottom: 0px !important;
+}
+
+tr { 
+    max-height: 30px !important;
+}
+
+.container-fluid{
+   padding: 0;
+   background-color: black;
+}
+
+
+.jumbotron {
+  background-size: cover;
+  padding-top: 30px;
+  padding-bottom: 20px;
+}
+
+    </style>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content" style="background-color: black;">
+        <div class="container-fluid">
+            <div class="row"><h2 class="display-8" style="color: white; text-align: left; padding-left: 40px;">{{project_name}}</h2> <span style="color: white;">&nbsp;(Shared by: {{project_dev}})</span></div>
+            <div class="jumbotron jumbotron"  style="width: 100%;border-radius: 0px;/*background-image: url('{% static 'scheduler/img/unsplash-j3.jpg' %}');*/ background-color: black;">
+              {% comment %} 
+              <div class="container">
+              <h4 class="display-8" style="color: white; text-align: center; font-size: 21px;">"{{quote}}"</br> - {{quote_a}}</h4>
+            </div>
+            {% endcomment %} 
+        <!-- Begin Page Content -->
+        
+          <center>
+          <!-- Page Heading -->
+          <!-- <h1 class="h3 mb-2 text-gray-800">{{project_name}}</h1> -->
+          <!-- <p class="mb-4">Hey!! you can train me and make me stronger by adding more modules and tasks to me.</p> -->
+          
+            </br>
+            <h3 class="h4 mb-2" style="color: white; padding-bottom: 5px;"><strong>Total Project Progress</strong></h3>
+          <div class="progress" style="height: 30px;border-radius:20px;width: 80%; margin-bottom: 10px; 
+          box-shadow: 0 0 3px #01fe32 inset, 0 0 10px #08ff35, 0 0 14px #08ff35, 0 0 9px #08ff35;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated"role="progressbar" aria-valuenow="{{final_progress}}|floatformat:2" aria-valuemin="0" aria-valuemax="100" style="font-size: 18px; width: {{final_progress}}%; background-color: #01fe32;">
+                {{final_progress|floatformat:2}}% Completed
+            </div>
+            
+          </div>  
+          <span style="margin-top: 15px; color: white;">Started: 7 days ago</span>
+
+
+          <!-- <p class="mb-4 p-2 text-primary" style="width: 80%; color: white;">Heyy look I have already grown 75%!!!!!.</p> -->
+
+        </center>
+
+    </div>
+
+
+        <div class="row">
+
+          <span style="color: white; font-size: 20px; padding-left: 50px;">Points Scored Today: {{points_today}}</span>
+          <div class="text-right" style="margin:auto; margin-right:5%; margin-bottom: 15px;">
+            <span style="float:center;">
+              <button align="right" onclick="javascript:expandall();" id="expandbtn"
+                style="margin:auto;color:white" class="btn btn-outline-warning">
+                <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 18px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong> Expand All</strong></button>
+                
+                {% comment %}            
+                <button align="right" data-toggle="modal" data-target="#addModule"
+                style="margin:auto;color:white" class="btn btn-outline-warning">
+                <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 18px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong> New Module</strong></button>
+              {% endcomment %}            
+
+              </span>
+          
+        </div>      
+         
+       </div>
+
+<!-- DataTales Example -->
+          {% for module in modules %}
+            <div class="card shadow mb-4 ml-4 mr-4" style="background-color: black;">
+                <div class="card-header py-3" onclick="qwe({{module.id}});" style="background-color: black;">
+
+                    <div class="row" >
+
+                        <a id="loginLink"  href="javascript:qwe({{module.id}});"><h6 style="font-size: 20px;" onclick="qwe({{module.id}});" class="m-0 ml-3 font-weight-bold text-white">{{module.module_name}} ↓	</h6></a>
+                        {% comment %} 
+                        <div class="text-right" style="margin:auto; margin-right:5%">
+                            <span style="float:center;">
+                              <button align="right" data-toggle="modal" data-target="#addTask-{{module.id}}"
+                                style="margin:auto;color:white" class="btn btn-sm btn-outline-warning">
+                                <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 18px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong> New Task</strong></button>
+                            </span>
+                          
+                        </div>
+
+                        {% endcomment %} 
+                    </div>
+
+                        
+                        <div class="progress" style="margin-top: 12px;">
+                          
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width:{{progress_percent|get_item:module.id}}%;" >{{progress_percent|get_item:module.id|floatformat:2 }}% Completed</div>
+                </div>  
+            </div>
+                <div class="card-body qwer qwe-{{module.id}}">
+                <div class="table-responsive" >
+                    <table class="table table-bordered display" id="dataTable-{{module.id}}" width="100%" cellspacing="0" style="color: white;">
+                    <thead>
+                        <tr>
+                        <th>Task Name</th>
+                        <th>Status</th>
+                        <th>Points Assigned</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for task in tasks %}
+                            {% if task.module.id == module.id %}
+                            <tr>
+                                <td id="task_name-{{task.id}}">
+                                    {{task.task_name}}
+                                </td>
+                                <!-- td_array[1].textContent.trim().endsWith('In Progress') -->
+                                <td contenteditable="True" data-status="{{task.get_status_display}}" class="status" id="status-{{task.id}}">
+                                    
+                                    <span id="statustext-{{task.id}}">{{task.get_status_display}}</span>&nbsp;&nbsp;
+                                    {% comment %} 
+                                    <select id="mySelect-{{task.id}}" onchange="updateTask('{{task.id}}', '{{module.id}}')" style="width: 19px;float: right;background-color: transparent; border: 0rem;">
+                                        <option>Change Status</option>
+                                        <option>Not Started</option>
+                                        <option>In Progress</option>
+                                        <option>Done</option>
+                                        <option>Cancel</option>
+                                    </select>
+                                    {% endcomment %} 
+                                </td> 
+                                 
+                                <td>
+                                  {{task.points}}
+                                </td>
+                                {% comment %} 
+                                <td>
+                                    <!-- <a href="{% url 'edit_task' task.id %}" style="color: darkorange;"><i class="material-icons" style="float: left; font-size:25px; padding-top: 0px;">
+                                        create
+                                      </i></a> -->
+
+                                      <a href="{% url 'delete_task' task.id %}" style="color: red;"><i class="material-icons" style="font-size:25px; padding-left: 20px;">
+                                        delete
+                                      </i></a>
+                                    
+                                  </td>  
+                                  {% endcomment %} 
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+                {% comment %} 
+                <div class="">
+                    <a href="{% url 'delete_module' module.id %}">
+                <button
+                    style="margin:8px; margin-top: 10px;background-color: #2196f3;color:white" class="btn  btn-large bg-danger float-right">
+                    <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 16px;" class="material-icons mdc-icon-button__icon">delete</i><strong style="font-size: 14px;"> Delete Module</strong></button></a>
+                  </div> 
+                  {% endcomment %} 
+                </div>
+
+                
+            </div>
+
+
+  <!-- Task Modal Content-->
+  <div class="modal fade" id="addTask-{{module.id}}" role="dialog">
+    <div class="modal-dialog ">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 align="center" class="modal-title">New Task</h6>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'add_task' module.id %}" class="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ add_task_form_modal|crispy }}
+            <center>
+              <div class="">
+                <br>
+            <button type="submit"
+            style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary ">
+            <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 20px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong style="font-size: 20px;"> New Task</strong></button>
+          </div>   
+          </center>
+            </form>
+        </div>
+
+    </div>
+  </div>
+  </div>
+  <!-- Task Modal Ends-->
+
+
+
+
+
+          {% endfor %}
+
+        </div>
+        <!-- /.container-fluid -->
+
+ <!-- Module Modal Content-->
+  <div class="modal fade" id="addModule" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 align="center" class="modal-title">New Module</h6>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'add_module' project_id %}" class="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ add_module_form|crispy }}
+            <center>
+              <div class="">
+                <br>
+            <button type="submit"
+            style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary ">
+            <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 20px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong style="font-size: 20px;"> New Module</strong></button>
+          </div>   
+          </center>
+            </form>
+        </div>
+
+    </div>
+  </div>
+  </div>
+  <!-- Module Modal Ends-->
+
+
+
+
+    {% endblock content %}

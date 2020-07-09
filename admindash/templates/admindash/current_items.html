@@ -1,0 +1,167 @@
+{% extends 'admindash/base_a.html' %}
+{% load static %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Items</h1>
+  <p class="mb-4">All the items listed below will be shown in the mobile app and website. Use add button to add a item
+    or the edit/delete buttons in the table to edit or delete the item</a>.</p>
+
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Items on sale</h6>
+    </div>
+    <br>
+    <div class="text-right" style="margin:auto; margin-right:5%">
+      <span style="float:center;">
+        <button align="right" data-toggle="modal" data-target="#myModal"
+          style="margin:auto;background-color: #2196f3;color:white" class="btn btn-large">
+          <i style="color:white" class="material-icons mdc-icon-button__icon">add_circle</i><strong> Add
+            Item</strong></button>
+      </span>
+    </div>
+
+    <div class="card-body">
+      <input class="form-control" id="myInput" type="text" placeholder="Search..">
+      <br>
+      <div class="table-responsive">
+        <table class="table table-bordered" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Discount Price</th>
+              <th>Category</th>
+              <th>Label</th>
+              <th>Slug</th>
+              <th>Description</th>
+              <th>Image 1</th>
+              <th>Image 2</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="myTable">
+            {% for i in item_data %}
+            <tr>
+              <td>{{ i.id }}</td>
+              <td>{{ i.title }}</td>
+              <td>{{ i.price }}</td>
+              <td>{{ i.discount_price }}</td>
+              <td>{{ i.category }}</td>
+              <td>{{ i.label }}</td>
+              <td>{{ i.slug }}</td>
+              <td>{{ i.description }}</td>
+              <td>{{ i.image }}</td>
+              <td>{{ i.image2 }}</td>
+              <td>
+                <span style="float:left;">
+                  <form action="{% url 'item_edit' i.id %}" method='GET'>
+                    {% csrf_token %}
+                    <button id="add-to-favorites" class="mdc-icon-button mdc-icon--raised" aria-label="Add to favorites"
+                      aria-pressed="false">
+                      {% comment %} <i
+                        class="material-icons mdc-icon-button__icon mdc-icon-button__icon--on">favorite</i>
+                      {% endcomment %}
+                      <i class="material-icons mdc-icon-button__icon" style="color:darkorange;">create</i>
+                    </button>
+                  </form>
+                </span>
+                <span style="float:left;">
+                  <form action="{% url 'item_delete' i.id %}" method='POST'>
+                    {% csrf_token %}
+                    <button id="add-to-favorites" class="mdc-icon-button mdc-icon--raised" aria-label="Add to favorites"
+                      aria-pressed="false">
+                      {% comment %} <i
+                        class="material-icons mdc-icon-button__icon mdc-icon-button__icon--on">favorite</i>
+                      {% endcomment %}
+                      <i class="material-icons mdc-icon-button__icon" style="color:red;">delete</i>
+                    </button>
+                  </form>
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Content-->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog ">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 align="center" class="modal-title">Add New Item</h3>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'add_item' %}" class="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <label class="bmd-label-floating" for="uname">Title:</label>
+              {{ register_form.title }}
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating" for="email">Price:</label>
+              {{ register_form.price }}
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating" for="email">Discount Price:</label>
+              {{ register_form.discount_price }}
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating" for="email">Category:</label>
+              {{ register_form.category }}
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating" for="email">Label:</label>
+              {{ register_form.label }}
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating" for="pwd2">Description:</label>
+              {{ register_form.description }}
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating" for="rollid">Upload First Image:</label>
+              {{ register_form.image }}
+            </div>
+            <div class="form-group">
+              <label class="bmd-label-floating" for="rollid">Upload Second Image:</label>
+              {{ register_form.image2 }}
+            </div>
+            <button type="submit" style="font-size:larger" class="btn btn-block btn-success"><i style="color:white"
+                class="material-icons mdc-icon-button__icon">add_to_photos</i> Add Item</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <h5></h5>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Modal Ends-->
+
+</div>
+<!-- /.container-fluid -->
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
+{% endblock content %}

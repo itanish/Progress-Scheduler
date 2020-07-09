@@ -1,0 +1,102 @@
+{% extends 'admindash/base_a.html' %}
+{% load static %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Specific Item in Order</h1>
+  <p class="mb-4">All the items of specific Orders are shown below with necessary details</a>.</p>
+
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+    {% for i in order_data %}
+      <h6 class="m-0 font-weight-bold text-primary">User Order Item List for Order Reference Code <b>#{{i.ref_code }}</b> </h6>
+    {% endfor %}
+    </div>
+    {% comment %} <div class="text-right" style="margin:auto; margin-right:5%">
+      <span style="float:center;">
+        <button align="right" data-toggle="modal" data-target="#myModal"
+          style="margin:auto;background-color: #2196f3;color:white" class="btn btn-large">
+          <i style="color:white" class="material-icons mdc-icon-button__icon">add_circle</i><strong> Add Coupon</strong></button>
+      </span>
+    </div> {% endcomment %}
+
+    <div class="card-body">
+      {% for i in order_data %}
+        <h5>UserName : {{i.user}}</h5>
+        <h6>Shipping Address : {{i.shipping_address.street_address}}, {{i.shipping_address.apartment_address}}, {{i.shipping_address.country}}, {{i.shipping_address.zip}}</h6>
+        <h6>Total Order Price : {{ i.get_total}} </h6>
+        <h6>Payment Method :  </h6>
+      {% endfor %}
+      <div class="row">
+        <div class="col-md-12">
+          <input class="form-control" style="margin-bottom:7px;" id="myInput" type="text" placeholder="Search Items..">
+        </div>
+        {% comment %} <div class="col-md-2 text-right">
+          <span style="float:center;">
+            <button align="right" data-toggle="modal" data-target="#myModal"
+              style="margin:auto; background-color: #2196f3;color:white" class="btn btn-large">
+              <i style="color:white" class="material-icons mdc-icon-button__icon">add_circle</i><strong> Add Coupon</strong></button>
+          </span>
+        </div> {% endcomment %}
+      </div>
+      <br>
+      <h5>Order Items List</h5>
+      <div class="table-responsive">
+        <table class="table table-bordered" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Item ID</th>
+              <th>Item Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="myTable">
+            {% for i in order_item_data %}
+            <tr>
+              <td>{{ i.id }}</td>
+              <td>{{ i.item }} {{i.item.description}}</td>
+              <td>{{ i.quantity }}</td>
+              <td>{{ i.get_final_price }}</td>
+              <td>{{ i.created_at }}</td>
+              {% comment %} <td>
+              <form action="{% url 'delete_coupon' i.id %}" method="POST">
+              {% csrf_token %}
+                <span style="float:left;">
+                    <button id="add-to-favorites" class="mdc-icon-button mdc-icon--raised" aria-label="Add to favorites"
+                      aria-pressed="false">
+                      {% comment %} <i
+                        class="material-icons mdc-icon-button__icon mdc-icon-button__icon--on">favorite</i>
+                      {% endcomment 
+                      <i class="material-icons mdc-icon-button__icon" style="color:red;">delete</i>
+                    </button>
+                </span>
+                </form>
+              </td> {% endcomment %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /.container-fluid -->
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
+{% endblock content %}
