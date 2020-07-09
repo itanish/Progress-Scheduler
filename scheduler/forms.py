@@ -3,9 +3,16 @@ from .models import user_project,project_task,project_module
 
 class add_project_form(forms.ModelForm):
 
+    deadline = forms.DateField(
+        widget=forms.TextInput(     
+            attrs={'type': 'date', 'class' : 'form-control'} 
+        ),
+        help_text='Select a date you want to show your product to the world.',
+    )   
+
     class Meta:
         model = user_project
-        fields = ['project_name']
+        fields = ['project_name', 'deadline']
         exclude = ['user','slug']
         widgets = {
             'project_name' : forms.TextInput(attrs={
@@ -13,6 +20,7 @@ class add_project_form(forms.ModelForm):
             }), 
 
         }
+        
 
 class add_module_form(forms.ModelForm):
 
@@ -26,6 +34,7 @@ class add_module_form(forms.ModelForm):
             }), 
 
         }
+        
 
 class add_task_form(forms.ModelForm):
 

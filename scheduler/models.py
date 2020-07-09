@@ -5,6 +5,7 @@ from autoslug import AutoSlugField
 from django.utils import timezone
 import random 
 import string
+from datetime import datetime    
 
 STATUS_CHOICES = (
     ('C1', 'Cancel'),
@@ -35,6 +36,7 @@ class user_project(models.Model):
     project_name = models.CharField(max_length=5000)
     slug = AutoSlugField(populate_from='project_name', unique_with=['id'], slugify=generate_random_url, unique=True)
     start_date = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateTimeField(default=datetime.now, blank=True)
     #progress_percent = models.FloatField(default=0)
 
 

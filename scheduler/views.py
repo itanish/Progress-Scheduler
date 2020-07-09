@@ -174,6 +174,7 @@ def projects(request, slug):
             project_name = i.project_name
             modules = project_module.objects.filter(project = i)
             start_date = i.start_date
+            deadline = i.deadline.date()
 
         # modules = project_module.objects.filter(project = projects)
 
@@ -248,7 +249,7 @@ def projects(request, slug):
                     points_today += int(i.points/2)
 
         
-        return render(request, "scheduler/project.html", {'quote':quotee, 'quote_a': quote_a, 'final_progress':final_progress,'progress_percent': progress_percent, 'modules': modules, 'tasks':tasks,'project_name':project_name,'project_id':project_id, 'add_module_form':add_module_form, 'add_task_form': add_task_form, 'add_task_form_modal': add_task_form_modal, 'points_today':points_today, 'slug': slug, 'start_date': start_date})
+        return render(request, "scheduler/project.html", {'quote':quotee, 'quote_a': quote_a, 'final_progress':final_progress,'progress_percent': progress_percent, 'modules': modules, 'tasks':tasks,'project_name':project_name,'project_id':project_id, 'add_module_form':add_module_form, 'add_task_form': add_task_form, 'add_task_form_modal': add_task_form_modal, 'points_today':points_today, 'slug': slug, 'start_date': start_date, 'deadline':deadline})
     
     else:
 

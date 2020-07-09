@@ -15,7 +15,23 @@
     <style>
 
 
+.timerli {
+  display: inline-block;
+  font-size: 15px;
+  list-style-type: none;
+  padding: 0.5em;
+  padding-bottom: 0rem;
+  text-transform: uppercase;
+  color: white;
+}
 
+.timerspan {
+  color: white;
+  display: block;
+  font-size: 21px;
+  padding-bottom: 0rem;
+  text-align: center;
+}
 
 .navbar {
     margin-bottom: 0px !important;
@@ -56,7 +72,7 @@ tr {
 
           </div>
             <div class="jumbotron jumbotron"  style="width: 100%;border-radius: 0px;/*background-image: url('{% static 'scheduler/img/unsplash-j3.jpg' %}');*/ background-color: black;">
-            <div class="container">
+            <div>
               <h4 class="display-8" style="color: white; text-align: center; font-size: 21px;">"{{quote}}"</br> - {{quote_a}}</h4>
             </div>
           
@@ -76,12 +92,23 @@ tr {
             </div>
             
           </div>  
-          <span style="margin-top: 15px; color: white;">Started: {{start_date|naturaltime}}</span>
+          <span style="margin-top: 15px; color: white; padding-bottom: 15px;">Started: {{start_date|naturaltime}}</span>
 
 
           <!-- <p class="mb-4 p-2 text-primary" style="width: 80%; color: white;">Heyy look I have already grown 75%!!!!!.</p> -->
+          <p style="color: white; font-size: 20px; margin-bottom: 0px; margin-top: 9px;">Time left to launch:</p>
+
+            <ul>
+              <li class="timerli"><span class="timerspan" id="days"></span>days</li>
+              <li class="timerli"><span class="timerspan" id="hours"></span>Hours</li>
+              <li class="timerli"><span class="timerspan" id="minutes"></span>Minutes</li>
+              <li class="timerli"><span class="timerspan" id="seconds"></span>Seconds</li>
+            </ul>
 
         </center>
+
+     
+      
 
     </div>
 
@@ -113,7 +140,7 @@ tr {
 
                     <div class="row" >
 
-                        <a id="loginLink"  href="javascript:qwe({{module.id}});"><h6 style="font-size: 20px;" onclick="qwe({{module.id}});" class="m-0 ml-3 font-weight-bold text-white">{{module.module_name}} ↓	</h6></a>
+                        <a id="loginLink"><h6 style="font-size: 20px;"class="m-0 ml-3 font-weight-bold text-white">{{module.module_name}} ↓	</h6></a>
                         
                         <div class="text-right" style="margin:auto; margin-right:5%">
                             <span style="float:center;">
@@ -138,7 +165,7 @@ tr {
                         <tr>
                         <th>Task Name</th>
                         <th>Status</th>
-                        <th>Points Assigned</th>
+                        <th>Points</th>
                         <th>Delete?</th>
                         </tr>
                     </thead>
@@ -247,7 +274,7 @@ tr {
             Now start working on it with creating new modules and adding tasks to it.   
         
           </p></center>
-          
+
           {% endif %}
         </div>
         <!-- /.container-fluid -->
@@ -326,6 +353,33 @@ tr {
   <!-- Share Modal Ends-->
 
 
+  <script>
+    const second = 1000,
+      minute = second * 60,
+      hour = minute * 60,
+      day = hour * 24;
+
+let countDown = new Date('{{deadline}}').getTime(),
+    x = setInterval(function() {    
+
+      let now = new Date().getTime(),
+          distance = countDown - now;
+
+      document.getElementById('days').innerText = Math.floor(distance / (day)),
+        document.getElementById('hours').innerText = Math.floor((distance % (day)) / (hour)),
+        document.getElementById('minutes').innerText = Math.floor((distance % (hour)) / (minute)),
+        document.getElementById('seconds').innerText = Math.floor((distance % (minute)) / second);
+
+      // if (distance < 0) {
+      //  clearInterval(x);
+      //  'ITS MY BIRTHDAY!';
+      // }
+
+    }, second)
+
+    console.log(countDown, '{{deadline}}')
+
+  </script>
 
 
     {% endblock content %}
