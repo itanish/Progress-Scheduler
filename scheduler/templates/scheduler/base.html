@@ -16,7 +16,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>ProgrezzBar</title>
+  <title>ProgressBoard - A simpler Project Management Tool</title>
 
   <!-- Custom fonts for this template-->
   <link href="{% static 'scheduler/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -38,6 +38,8 @@
   <link href="{% static 'scheduler/css/sb-admin-2.css' %}" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+  <link rel="icon" type="image/png" href="{% static 'scheduler/img/ProgressBoard_Logo.png' %}"/>
 
   <script language="JavaScript" type="text/javascript">
 
@@ -52,6 +54,12 @@
 $(document).ready(function() {
     $('table.display').DataTable();
     $('.qwer').hide();
+
+    $('#priorityT').DataTable( {
+    language: {
+      emptyTable: "No Priority Tasks yet!! All the tasks you select as priority will be displayed here.",
+    }
+});
 } );
 
 
@@ -85,6 +93,8 @@ function qwe(mod_id) {
   }
 
 }
+
+
 
 
 
@@ -178,7 +188,6 @@ function updateTask(id, mid){
   }
 
 
-
   </script>
 
 <style>
@@ -218,10 +227,13 @@ select option[value="4"] {
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
+        <div class="sidebar-brand-icon">
+          <!-- <i class="fas fa-laugh-wink"></i> -->
+          <img width="40px" height="40px" src="{% static 'scheduler/img/ProgressBoard_Logo.png' %}"/>
+        
         </div>
-        <div class="sidebar-brand-text mx-3">SB Admin</div>
+        <div class="sidebar-brand-text mx-1 mt-3">ProgressBoard</div>
+
       </a>
 
       <!-- Divider -->
@@ -231,7 +243,7 @@ select option[value="4"] {
       <li class="nav-item active">
         <a class="nav-link" href="{% url 'scheduler' %}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span style="color: white;">ProgrezzBoard</span></a>
+          <span style="color: white;">ProgressBoard</span></a>
       </li>
       {% comment %}
       <li class="nav-item">
@@ -279,7 +291,8 @@ select option[value="4"] {
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
-
+      
+      {% if projects %}
       {% for project in projects %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'project' project.slug %}">
@@ -287,6 +300,15 @@ select option[value="4"] {
             <span style="color: white;">{{project.project_name}}</span></a>
         </li>
       {% endfor %}
+      {% else %}
+      <center>
+
+      
+        <p style="color: white; font-style: italic;">
+          No projects yet!
+        </p>
+      </center>
+      {% endif %}
 
 
       {% comment %}

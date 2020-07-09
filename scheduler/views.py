@@ -34,6 +34,17 @@ def random_css(a):
 def scheduler(request):
 
     projects = user_project.objects.filter(user = request.user)
+
+    projectss = {}
+    points = []
+    total_task = 0
+    task_done = 0
+    task_inprogress = 0
+    priority_task = [] 
+    task_done_per = 0
+    task_inprogress_per = 0
+
+
     if projects:
 
         projectss = {}

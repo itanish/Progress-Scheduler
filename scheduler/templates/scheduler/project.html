@@ -105,7 +105,8 @@ tr {
          
        </div>
 
-<!-- DataTales Example -->
+       {% if modules %}
+
           {% for module in modules %}
             <div class="card shadow mb-4 ml-4 mr-4" style="background-color: black;">
                 <div class="card-header py-3" onclick="qwe({{module.id}});" style="background-color: black;">
@@ -193,7 +194,8 @@ tr {
 
                 
             </div>
-
+        
+        
 
   <!-- Task Modal Content-->
   <div class="modal fade" id="addTask-{{module.id}}" role="dialog">
@@ -231,6 +233,22 @@ tr {
 
           {% endfor %}
 
+          {% else %}
+          <center>
+
+          <p style="
+          padding-top: 30px;
+          color: white;
+          align-content: center;
+          justify-content: center;
+          font-style: italic;
+          font-size: 20px">
+            Yay!! First step clear!!! You have successfully created your project. <br>
+            Now start working on it with creating new modules and adding tasks to it.   
+        
+          </p></center>
+          
+          {% endif %}
         </div>
         <!-- /.container-fluid -->
 

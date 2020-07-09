@@ -8,7 +8,7 @@
         
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h1 class="h3 mb-0 text-white">ProgrezzBoard!!</h1>
+          <h1 class="h3 mb-0 text-white">Your ProgressBoard!!</h1>
           {% comment %}
           <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
         
@@ -52,7 +52,7 @@
                     </div>
                   </div>
                   <div class="col-auto">
-                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    <i class="fas fa-tasks fa-2x text-gray-300"></i>
                   </div>
                 </div>
               </div>
@@ -112,16 +112,30 @@
             <!-- Project Card Example -->
             <div class="card shadow mb-4">
               <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Your Projects Progrezz Report</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Your Projects Progress Report</h6>
               </div>
               <div class="card-body">
-
+                {% if projectss %}
                 {% for key,value in projectss.items%}
                   <h4 class="small font-weight-bold">{{key}} <span class="float-right">{{value|floatformat:2}}%</span></h4>
                   <div class="progress mb-4">
                     <div class="progress-bar {{ compliment|random_css }}" role="progressbar" style="width: {{value}}%" aria-valuenow="{{value}}" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 {% endfor %}
+                
+                {% else %}
+                <center>
+
+      
+                  <p style="color: black; font-style: italic;">
+                    No projects yet!
+                  </p>
+                  <p style="color: black; font-style: italic;">
+                    Click on New Project and get started!
+                  </p>
+
+                </center>
+                {% endif %}
 
 
               </div>
@@ -140,7 +154,7 @@
                     </div>
                     <div class="card-body">
                       <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-bordered" id="priorityT" width="100%" cellspacing="0">
                           <thead>
                             <tr>
                               <th>Task Name</th>
