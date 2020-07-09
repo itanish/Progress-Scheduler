@@ -21,7 +21,7 @@ from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'remotework.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'projectscheduler.settings')
 
 application = get_wsgi_application()
 application = DjangoWhiteNoise(application)
