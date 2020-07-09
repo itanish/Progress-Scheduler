@@ -1,0 +1,16 @@
+Django==2.2.7
+Markdown
+psycopg2
+dj-database-url
+dj-static
+gunicorn
+Unipath
+python-decouple
+Pillow
+bleach
+whitenoise==3.3.1
+requests
+django-autoslug
+django-crispy-forms
+django-allauth
+

@@ -165,3 +165,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 # 1 day in seconds
 # ACCOUNT_LOGOUT_REDIRECT_URL ='/accounts/login/'
 # LOGIN_REDIRECT_URL = '/accounts/email/' # default to /accounts/profile 
+
+
+import dj_database_url 
+prod_db  =  dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(prod_db)
