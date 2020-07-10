@@ -165,10 +165,12 @@ def random_quote():
         random_index = randint(0, len(data)-1)
         return data[random_index]
 
-@login_required
 def projects(request, slug):
 
-    projects = user_project.objects.filter(user = request.user, slug = slug)
+    projects = {}
+    if request.user.is_authenticated:
+
+        projects = user_project.objects.filter(user = request.user, slug = slug)
     # projects = user_project.objects.filter(slug = slug)
 
     # print('Finding errorrrr:', projects)
@@ -176,6 +178,7 @@ def projects(request, slug):
     if projects:
 
         for i in projects:
+            project_user = i.user
             project_id = i.id
             project_name = i.project_name
             modules = project_module.objects.filter(project = i)
@@ -255,8 +258,7 @@ def projects(request, slug):
                     points_today += int(i.points/2)
 
         
-        return render(request, "scheduler/project.html", {'quote':quotee, 'quote_a': quote_a, 'final_progress':final_progress,'progress_percent': progress_percent, 'modules': modules, 'tasks':tasks,'project_name':project_name,'project_id':project_id, 'add_module_form':add_module_form, 'add_task_form': add_task_form, 'add_task_form_modal': add_task_form_modal, 'points_today':points_today, 'slug': slug, 'start_date': start_date, 'deadline':deadline})
-    
+        return render(request, "scheduler/project.html", {'project_user': project_user, 'quote':quotee, 'quote_a': quote_a, 'final_progress':final_progress,'progress_percent': progress_percent, 'modules': modules, 'tasks':tasks,'project_name':project_name,'project_id':project_id, 'add_module_form':add_module_form, 'add_task_form': add_task_form, 'add_task_form_modal': add_task_form_modal, 'points_today':points_today, 'slug': slug, 'start_date': start_date, 'deadline':deadline})
     else:
 
         projects = user_project.objects.filter(slug = slug)
@@ -340,7 +342,7 @@ def projects(request, slug):
 
 
         return render(request, "scheduler/project_shared.html", {'project_dev' : project_dev, 'quote':quotee, 'quote_a': quote_a, 'final_progress':final_progress,'progress_percent': progress_percent, 'modules': modules, 'tasks':tasks,'project_name':project_name,'project_id':project_id, 'add_module_form':add_module_form, 'add_task_form': add_task_form, 'add_task_form_modal': add_task_form_modal, 'points_today':points_today})
-    
+
 
 def add_project(request):
     projectform = add_project_form(request.POST)

@@ -65,10 +65,18 @@ tr {
 
             <h2 class="display-8" style="color: white; text-align: left; padding-left: 40px;">{{project_name}}</h2>
             
-
+            {% if request.user == project_user %}
             <a href="#" data-toggle="modal" data-target="#share"><i class="material-icons" style="font-size: 30px;padding-left: 20px;float: right;color: white; padding-right: 40px;padding-top: 5px;">
               share
             </i></a>
+
+            {% else %}
+
+            <button onclick="javascript:expandall();" id="expandbtn"
+            style="color:white; margin-right: 20px;" class="btn btn-outline-warning">
+            <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 18px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong> Shared by:  </strong></button>
+        
+            {% endif %}
 
           </div>
             <div class="jumbotron jumbotron"  style="width: 100%;border-radius: 0px;/*background-image: url('{% static 'scheduler/img/unsplash-j3.jpg' %}');*/ background-color: black;">
