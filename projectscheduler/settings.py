@@ -21,10 +21,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'h+hh)e)i4u_+)m-y@61d954o-=!z=v0vkdy#vqh$4(nh14=ra9'
+with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -189,7 +191,10 @@ DATABASES['default'].update(prod_db)
 DJPADDLE_VENDOR_ID = '118174'
 
 # create one at https://vendors.paddle.com/authentication
-DJPADDLE_API_KEY = '4a824727819932217e015ec1a53dff030eaf8df550b23c6172'
+with open(os.path.join(BASE_DIR, 'paddle_api_key.txt')) as f:
+    DJPADDLE_API_KEY = f.read().strip()
+
+
 
 with open(os.path.join(BASE_DIR, 'paddle_public_key.txt')) as f:
     DJPADDLE_PUBLIC_KEY = f.read().strip()

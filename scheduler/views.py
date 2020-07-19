@@ -18,6 +18,7 @@ from djpaddle.models import Checkout as checkoutt
 import requests
 from allauth.account.signals import user_logged_in
 from .decorators import subscription_required
+from django.conf import settings as conf_settings
 
 # Create your views here.
 
@@ -57,7 +58,7 @@ def logged_in(sender, **kwargs):
 
         payload2 =   {
             "subscription_id": data['order']['subscription_id'],
-            "vendor_auth_code": "4a824727819932217e015ec1a53dff030eaf8df550b23c6172",
+            "vendor_auth_code": conf_settings.DJPADDLE_API_KEY,
             "vendor_id": "118174"
         }
 
@@ -131,7 +132,7 @@ def paymentsettings(request):
         check_cr = checkout_id.created_at
 
 
-        print(request.user.email, check_id, check_c, check_cr)
+        # print(request.user.email, check_id, check_c, check_cr)
 
 
         payload = {'checkout_id': check_id}
@@ -151,14 +152,14 @@ def paymentsettings(request):
 
         payload2 =   {
             "subscription_id": data['order']['subscription_id'],
-            "vendor_auth_code": "4a824727819932217e015ec1a53dff030eaf8df550b23c6172",
+            "vendor_auth_code": conf_settings.DJPADDLE_API_KEY,
             "vendor_id": "118174"
         }
 
         r2 = requests.post(url2, params=payload2)
 
         data2=json.loads(r2.text)
-        print(data2)
+        # print(data2)
         # print(data2['response'][0]['state'])
 
         sub_state = data2['response'][0]['state']
