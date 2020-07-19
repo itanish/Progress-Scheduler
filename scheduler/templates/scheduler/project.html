@@ -244,10 +244,22 @@ tr {
             <center>
               <div class="">
                 <br>
-            <button type="submit"
-            style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary ">
-            <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 20px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong style="font-size: 20px;"> New Task</strong></button>
-          </div>   
+                {% if sub_state %}
+
+                  <button type="submit"
+                  style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary ">
+                  <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 20px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong style="font-size: 20px;"> New Task</strong></button>
+                {% else %}
+                  <button type="submit" disabled
+                  style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary disabled">
+                  <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 20px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong style="font-size: 20px;"> New Task</strong></button>
+                  <br>
+                  Subscription Expired! Please renew to add projects.
+    
+                {% endif %}
+    
+          
+                </div>   
           </center>
             </form>
         </div>
@@ -307,10 +319,23 @@ tr {
             <center>
               <div class="">
                 <br>
-            <button type="submit"
-            style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary ">
+            {% if sub_state %}
+
+              <button type="submit"
+              style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary ">
+              <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 20px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong style="font-size: 20px;"> New Module</strong></button>
+            
+            {% else %}
+
+            <button type="submit" disabled
+            style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary disabled">
             <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 20px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong style="font-size: 20px;"> New Module</strong></button>
-          </div>   
+            <br>
+            Subscription Expired! Please renew to add projects.
+
+            {% endif %}
+
+            </div>   
           </center>
             </form>
         </div>

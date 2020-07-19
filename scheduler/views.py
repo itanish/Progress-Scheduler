@@ -121,76 +121,91 @@ def paymentsettings(request):
     ###Get Order Data
     url = 'http://checkout.paddle.com/api/1.0/order'
 
-    checkout_id = checkoutt.objects.filter(email = request.user.email, completed=True).latest('created_at')
-    
-    print(checkout_id)
-    check_id = checkout_id.id
-    check_c = checkout_id.completed
-    check_cr = checkout_id.created_at
+    try:
+
+        checkout_id = checkoutt.objects.filter(email = request.user.email, completed=True).latest('created_at')
+        
+        print(checkout_id)
+        check_id = checkout_id.id
+        check_c = checkout_id.completed
+        check_cr = checkout_id.created_at
 
 
-    print(request.user.email, check_id, check_c, check_cr)
+        print(request.user.email, check_id, check_c, check_cr)
 
 
-    payload = {'checkout_id': check_id}
+        payload = {'checkout_id': check_id}
 
-    r = requests.get(url, params=payload)
+        r = requests.get(url, params=payload)
 
-    
-    data=json.loads(r.text)
-    # print(data)
-    # print(data['order']['subscription_id'])
-    subscription_id = data['order']['subscription_id']
-    receipt_url = data['order']['receipt_url']
-
-
-    ###Get Subscription Data
-    url2 = 'https://vendors.paddle.com/api/2.0/subscription/users'
-
-    payload2 =   {
-        "subscription_id": data['order']['subscription_id'],
-        "vendor_auth_code": "4a824727819932217e015ec1a53dff030eaf8df550b23c6172",
-        "vendor_id": "118174"
-    }
-
-    r2 = requests.post(url2, params=payload2)
-
-    data2=json.loads(r2.text)
-    print(data2)
-    # print(data2['response'][0]['state'])
-
-    sub_state = data2['response'][0]['state']
-    plan_id = data2['response'][0]['plan_id']
-    cancel_url = data2['response'][0]['cancel_url']
-    update_url = data2['response'][0]['update_url']
-    next_payment = data2['response'][0]['next_payment']
-    payment_information = data2['response'][0]['payment_information']
+        
+        data=json.loads(r.text)
+        # print(data)
+        # print(data['order']['subscription_id'])
+        subscription_id = data['order']['subscription_id']
+        receipt_url = data['order']['receipt_url']
 
 
-    card_type='Paypal'
-    last_four_digits='Paypal'
+        ###Get Subscription Data
+        url2 = 'https://vendors.paddle.com/api/2.0/subscription/users'
 
-    if payment_information['payment_method']=='card':
-        card_type =payment_information['card_type'], 
-        last_four_digits=payment_information['last_four_digits'], 
+        payload2 =   {
+            "subscription_id": data['order']['subscription_id'],
+            "vendor_auth_code": "4a824727819932217e015ec1a53dff030eaf8df550b23c6172",
+            "vendor_id": "118174"
+        }
 
-    context = {
+        r2 = requests.post(url2, params=payload2)
 
-        'subscription_id':subscription_id,
-        'plan_id':plan_id,
-        'receipt_url':receipt_url,
-        'sub_state':sub_state,
-        'cancel_url':cancel_url,
-        'update_url':update_url,
-        'payment_method':payment_information['payment_method'],
-        'card_type':card_type, 
-        'last_four_digits':last_four_digits, 
-        'next_amount':next_payment['amount'], 
-        'next_date':next_payment['date'], 
+        data2=json.loads(r2.text)
+        print(data2)
+        # print(data2['response'][0]['state'])
 
+        sub_state = data2['response'][0]['state']
+        plan_id = data2['response'][0]['plan_id']
+        cancel_url = data2['response'][0]['cancel_url']
+        update_url = data2['response'][0]['update_url']
+        next_payment = data2['response'][0]['next_payment']
+        payment_information = data2['response'][0]['payment_information']
 
 
-    }
+        card_type='Paypal'
+        last_four_digits='Paypal'
+
+        if payment_information['payment_method']=='card':
+            card_type =payment_information['card_type'], 
+            last_four_digits=payment_information['last_four_digits'], 
+
+        context = {
+
+            'subscription_id':subscription_id,
+            'plan_id':plan_id,
+            'receipt_url':receipt_url,
+            'sub_state':sub_state,
+            'cancel_url':cancel_url,
+            'update_url':update_url,
+            'payment_method':payment_information['payment_method'],
+            'card_type':card_type, 
+            'last_four_digits':last_four_digits, 
+            'next_amount':next_payment['amount'], 
+            'next_date':next_payment['date'], 
+        }
+    except:
+
+        context = {
+
+            'subscription_id':'Could not find you in our subscriptions! Please contact me if you paid and still getting this error!',
+            'plan_id':'Could not find you in our subscriptions!',
+            'receipt_url':'Could not find you in our subscriptions!',
+            'sub_state':'Could not find you in our subscriptions!',
+            'cancel_url':'',
+            'update_url':'',
+            'payment_method':'Could not find you in our subscriptions!',
+            'card_type':'Could not find you in our subscriptions!', 
+            'last_four_digits':'Could not find you in our subscriptions!', 
+            'next_amount':'Could not find you in our subscriptions!', 
+            'next_date':'Could not find you in our subscriptions!', 
+        }
 
     return render(request, "scheduler/paymentsettings.html", context)
 
@@ -198,8 +213,15 @@ def paymentsettings(request):
 
 @login_required
 def scheduler(request):
+    sub_state = False
+    try:   
+        if request.session['sub_state'] == 'active':
+            sub_state = True
+        print(request.session['sub_state'])
+    except:
+        print('Subscription Issue')
 
-    # print(request.session['sub_state'])
+    
 
     projects = user_project.objects.filter(user = request.user)
 
@@ -309,7 +331,7 @@ def scheduler(request):
         task_inprogress_per = (task_inprogress/total_task) * 100
 
 
-    return render(request, "scheduler/index.html", {'projectss':projectss, 'points':sum(points), 'total_proj' : len(projectss), 'total_task': total_task, 'task_done': task_done, 'task_inprogress': task_inprogress, 'task_inprogress_per': task_inprogress_per, 'task_done_per': task_done_per, 'priority_task':priority_task})
+    return render(request, "scheduler/index.html", {'sub_state': sub_state, 'projectss':projectss, 'points':sum(points), 'total_proj' : len(projectss), 'total_task': total_task, 'task_done': task_done, 'task_inprogress': task_inprogress, 'task_inprogress_per': task_inprogress_per, 'task_done_per': task_done_per, 'priority_task':priority_task})
 
 
 def try_progress(request):
@@ -328,6 +350,16 @@ def random_quote():
         return data[random_index]
 
 def projects(request, slug):
+
+    sub_state = False
+    try:   
+        if request.session['sub_state'] == 'active':
+            sub_state = True
+        print(request.session['sub_state'])
+    except:
+        print('Subscription Issue')
+
+    
 
     projects = {}
     if request.user.is_authenticated:
@@ -420,7 +452,7 @@ def projects(request, slug):
                     points_today += int(i.points/2)
 
         
-        return render(request, "scheduler/project.html", {'project_user': project_user, 'quote':quotee, 'quote_a': quote_a, 'final_progress':final_progress,'progress_percent': progress_percent, 'modules': modules, 'tasks':tasks,'project_name':project_name,'project_id':project_id, 'add_module_form':add_module_form, 'add_task_form': add_task_form, 'add_task_form_modal': add_task_form_modal, 'points_today':points_today, 'slug': slug, 'start_date': start_date, 'deadline':deadline})
+        return render(request, "scheduler/project.html", {'sub_state': sub_state, 'project_user': project_user, 'quote':quotee, 'quote_a': quote_a, 'final_progress':final_progress,'progress_percent': progress_percent, 'modules': modules, 'tasks':tasks,'project_name':project_name,'project_id':project_id, 'add_module_form':add_module_form, 'add_task_form': add_task_form, 'add_task_form_modal': add_task_form_modal, 'points_today':points_today, 'slug': slug, 'start_date': start_date, 'deadline':deadline})
     
     else:
 
@@ -452,7 +484,7 @@ def projects(request, slug):
             if sum_progress['points__sum']==None:
                 sum_progress['points__sum'] = 0
 
-            if sum_total['points__sum'] !=0:
+            if sum_total['points__sum'] !=0 and sum_total['points__sum'] !=None:
                 progress_percent[i.id] = ((sum_done['points__sum'] + sum_progress['points__sum']/2)/sum_total['points__sum'])*100
             # progress_done_points[i.id] = sum_done['points__sum'] + int(sum_progress['points__sum']/2)
             else:

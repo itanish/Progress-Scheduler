@@ -719,14 +719,23 @@ select option[value="4"] {
             <center>
               <div class="">
                 <br>
-            <button type="submit"
-            style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary ">
+            {% if sub_state %}
+              <button type="submit"
+              style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary ">
+              <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 20px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong style="font-size: 20px;"> New Project</strong></button>
+            
+            {% else %}
+            <button type="submit" disabled
+            style="margin:20px; margin-top: 0px;background-color: #2196f3;color:white" class="btn  btn-large bg-gradient-primary disabled">
             <i style="color:white;line-height: 6px;vertical-align: sub; font-size: 20px;" class="material-icons mdc-icon-button__icon">add_circle</i><strong style="font-size: 20px;"> New Project</strong></button>
-          </div>   
+            <br>
+            Subscription Expired! Please renew to add projects.
+
+            {% endif %}
+            </div>   
           </center>
             </form>
         </div>
-
 
         {% if demo %}
         <div class="modal-footer">
