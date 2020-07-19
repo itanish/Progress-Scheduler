@@ -13,4 +13,4 @@ requests
 django-autoslug
 django-crispy-forms
 django-allauth
-
+dj-paddle

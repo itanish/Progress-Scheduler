@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    'djpaddle',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +75,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'scheduler.context_processors.projects',
+                'djpaddle.context_processors.vendor_id',
             ],
         },
     },
@@ -142,13 +146,21 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/app'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
 # For Email as authentication Method
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
+
+#Email Details
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'progressboardtanish@gmail.com'
+EMAIL_HOST_PASSWORD = 'ProgressBoard@1234'
+
 
 # CRISPY FORMS
 
@@ -169,3 +181,17 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 import dj_database_url 
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
+
+
+#PADDLE Integration Data
+
+# can be found at https://vendors.paddle.com/authentication
+DJPADDLE_VENDOR_ID = '118174'
+
+# create one at https://vendors.paddle.com/authentication
+DJPADDLE_API_KEY = '4a824727819932217e015ec1a53dff030eaf8df550b23c6172'
+
+with open(os.path.join(BASE_DIR, 'paddle_public_key.txt')) as f:
+    DJPADDLE_PUBLIC_KEY = f.read().strip()
+
+# print(DJPADDLE_PUBLIC_KEY)

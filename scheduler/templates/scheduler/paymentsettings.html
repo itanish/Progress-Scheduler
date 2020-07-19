@@ -1,0 +1,67 @@
+{% extends 'scheduler/base.html' %}
+{% load mytags %}
+
+    {% block content%}
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+               <!-- Page Heading -->
+               <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-white">Payment Settings</h1>
+    
+            </div>
+
+            <!-- Info Div -->
+            <div class="card align-item-center mb-3" style="width: 96%; background-color: #1a202c; border-color: white;">
+                <div class="card-body" style="color: white;">
+
+            <div>
+                    <h5 class="h5 mb-3 text-white">Subscription Info:</h5>
+
+                    <h6 class="h6 mb-2 text-white">Subscription ID: {{subscription_id}}</h6>
+                    {% if plan_id == 600821 %}
+                        <h6 class="h6 mb-2 text-white">Plan Choosen: ProgressBoard Monthly</h6>
+                    {% else %}
+                        <h6 class="h6 mb-2 text-white">Plan Choosen: ProgressBoard Yearly</h6>
+                    {% endif %}
+                    <h6 class="h6 mb-2 text-white">Subscription State: {{sub_state|title}}</h6>
+              
+            </div>
+            </div>
+            </div>
+
+            <!-- Info Div -->
+            <div class="card align-item-center mb-3" style="width: 96%; background-color: #1a202c; border-color: white;">
+                <div class="card-body" style="color: white;">
+
+            <div>
+                    <h5 class="h5 mb-3 text-white">Payment Info:</h5>
+
+                    <h6 class="h6 mb-2 text-white">Payment Method: {{payment_method|title}}</h6>
+                    <h6 class="h6 mb-2 text-white">Card Type: {{card_type|title}}</h6>
+                    <h6 class="h6 mb-2 text-white">Card Number: XXXX XXXX XXXX {{last_four_digits}}</h6>
+                    <h6 class="h6 mb-2 text-white">Next Payment On: {{next_date}}</h6>
+                    <h6 class="h6 mb-2 text-white">Next Payment Amount: ${{next_amount}}</h6>
+              
+            </div>
+            </div>
+            </div>
+
+
+                <div class="row" style="width:50%; margin:0 auto;">
+                    <center>
+
+                    <a href="{{update_url}}" target="_blank" class="btn btn-outline-warning mr-3 mb-2" role="button">Update Payment Details</a>
+
+                    <a href="{{receipt_url}}" target="_blank" class="btn btn-outline-primary mr-3 mb-2" role="button">Last Invoice</a>
+
+                    <a href="{{cancel_url}}" target="_blank" class="btn btn-outline-danger mb-2" role="button">Cancel Subscription</a>
+                </center>
+
+                </div>
+
+          
+      </div>
+      <!-- /.container-fluid -->
+
+    {% endblock content %}

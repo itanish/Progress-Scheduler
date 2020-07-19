@@ -23,4 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('scheduler.urls')),
     path('admindash/', include('admindash.urls')),
+    path("paddle/", include("djpaddle.urls", namespace="djpaddle")),
+
 ]

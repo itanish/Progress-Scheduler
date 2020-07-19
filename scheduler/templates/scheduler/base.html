@@ -39,7 +39,17 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   
-  <link rel="icon" type="image/png" href="{% static 'scheduler/img/ProgressBoard_Logo.png' %}"/>
+  <link rel="icon" href="{% static 'scheduler/img/ProgressBoard_Logo.ico' %}"/>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-172936339-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-172936339-1');
+  </script>
 
   <script language="JavaScript" type="text/javascript">
 
@@ -141,12 +151,12 @@ function updateTask(id, mid){
     choice = {'Cancel':'C1','Not Started':'C2','In Progress':'C3','Done':'C4'}
 
     if (newStatus == 'Done'){
-          document.getElementById('status-' + id).style.background="#32CD32";
+          document.getElementById('status-' + id).style.background="#64DD17";
           document.getElementById('status-' + id).value = 'Done'
           document.getElementById('statustext-' + id).innerHTML = 'Done'
       };
       if (newStatus == 'In Progress'){
-          document.getElementById('status-' + id).style.background="rgb(247, 226, 36)";
+          document.getElementById('status-' + id).style.background="#FBC02D";
           document.getElementById('status-' + id).value = 'In Progress'
           document.getElementById('statustext-' + id).innerHTML = 'In Progress'
       };
@@ -222,7 +232,7 @@ select option[value="4"] {
   <!-- Page Wrapper -->
   <div id="wrapper">
 
-    {% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated or demo %}
       <!-- Sidebar -->
       <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -242,9 +252,15 @@ select option[value="4"] {
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
+          {% if demo %}
+          <a class="nav-link" href="{% url 'scheduler_demo' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span style="color: white;">ProgressBoard</span></a>
+          {% else %}
           <a class="nav-link" href="{% url 'scheduler' %}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span style="color: white;">ProgressBoard</span></a>
+          {% endif %}
         </li>
         {% comment %}
         <li class="nav-item">
@@ -294,6 +310,16 @@ select option[value="4"] {
         <!-- Nav Item - Pages Collapse Menu -->
         
         {% if projects %}
+        {% if demo %}
+        {% for project in projects %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'project_demo' project.slug %}">
+            <i class="fas fa-fw fa-tachometer-alt" style="color: white;"></i>
+            <span style="color: white;">{{project.project_name}}</span></a>
+        </li>
+      {% endfor %}
+
+        {% else %}
         {% for project in projects %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'project' project.slug %}">
@@ -301,6 +327,8 @@ select option[value="4"] {
               <span style="color: white;">{{project.project_name}}</span></a>
           </li>
         {% endfor %}
+        {% endif %}
+
         {% else %}
         <center>
 
@@ -412,6 +440,8 @@ select option[value="4"] {
 
       </ul>
       <!-- End of Sidebar -->
+
+
 
       {% endif %}
 
@@ -585,6 +615,9 @@ select option[value="4"] {
             <div class="topbar-divider d-none d-sm-block"></div>
             {% endcomment %}
             <!-- Nav Item - User Information -->
+            {% if demo %}
+            <a href="/#pricing" class="btn btn-block btn btn-primary" style="background-image: linear-gradient(45.34deg, #EA52F8 5.66%, #0066FF 94.35%); border: #007bff; color: white; width: 100%; height: 70%; margin: auto;">Unlock All!</a>
+            {% endif %}
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -593,6 +626,7 @@ select option[value="4"] {
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+               {% comment %}
                 <a class="dropdown-item" href="#">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
@@ -601,11 +635,12 @@ select option[value="4"] {
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
                 </a>
-                <a class="dropdown-item" href="#">
+                {% endcomment %}
+                <a class="dropdown-item" href="{% url 'paymentsettings' %}">
                   <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
+                  Payment Settings
                 </a>
-                <div class="dropdown-divider"></div>
+                <!-- <div class="dropdown-divider"></div> -->
                 <a class="dropdown-item" href="{% url 'account_logout' %}">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
@@ -692,6 +727,14 @@ select option[value="4"] {
             </form>
         </div>
 
+
+        {% if demo %}
+        <div class="modal-footer">
+          <span style="color: black;">Like it? Want full access?  </span><a href="/#pricing" class="btn btn-block btn btn-primary" style="background-image: linear-gradient(45.34deg, #EA52F8 5.66%, #0066FF 94.35%); border: #007bff; color: white; width: 50%; height: 70%; margin: auto;">Unlock Now!</a>
+
+        </div>
+        {% endif %}
+
     </div>
   </div>
   <!-- Modal Ends-->
@@ -721,6 +764,8 @@ select option[value="4"] {
             </form>
             
         </div>
+
+        
 
     </div>
   </div>
@@ -766,19 +811,19 @@ select option[value="4"] {
   for (i = 0; i < td_array.length; i++){
       // console.log(td_array[i].textContent)
       if (td_array[i].textContent.trim().startsWith('Done')){
-          td_array[i].style.background = "#32CD32";
+          td_array[i].style.background = "#64DD17";
           td_array[i].style.color = "white";
       };
       if (td_array[i].textContent.trim().startsWith('In Progress')){
-          td_array[i].style.background = "rgb(247, 226, 36)";
+          td_array[i].style.background = "#FBC02D";
           td_array[i].style.color = "white";
       };
       if (td_array[i].textContent.trim().startsWith('Not Started')){
-          td_array[i].style.background = "rgb(247, 45, 45)";
+          td_array[i].style.background = "#FF5722";
           td_array[i].style.color = "white";
       };
       if (td_array[i].textContent.trim().startsWith('Cancel')){
-          td_array[i].style.background = "rgb(40, 198, 236)";
+          td_array[i].style.background = "#00B0FF";
           td_array[i].style.color = "white";
       };
   };

@@ -1,17 +1,190 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ProgressBoard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">    
+    <title>ProgressBoard - A Simpler Project Management Tool</title>
+    <link rel="icon" href="{% static 'scheduler/img/ProgressBoard_Logo.ico' %}"/>
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
-    <link rel="stylesheet" href="dist/css/style.css">
+    <link rel="stylesheet" href="{% static 'scheduler/landing_page/style.css'%}">
 	<script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
     <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- CSS only -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<link href="{% static 'scheduler/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+<!-- JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+<script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+
+
+<script>
+
+var TxtType = function(el, toRotate, period) {
+        this.toRotate = toRotate;
+        this.el = el;
+        this.loopNum = 0;
+        this.period = parseInt(period, 10) || 2000;
+        this.txt = '';
+        this.tick();
+        this.isDeleting = false;
+    };
+
+    TxtType.prototype.tick = function() {
+     
+        var i = this.loopNum % this.toRotate.length;
+        var fullTxt = this.toRotate[i];
+
+        if (this.isDeleting) {
+        this.txt = fullTxt.substring(0, this.txt.length - 1);
+        } else {
+        this.txt = fullTxt.substring(0, this.txt.length + 1);
+        }
+
+        this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+
+        var that = this;
+        var delta = 200 - Math.random() * 100;
+
+        if (this.isDeleting) { delta /= 2; }
+
+        if (!this.isDeleting && this.txt === fullTxt) {
+        delta = this.period;
+        this.isDeleting = true;
+        } else if (this.isDeleting && this.txt === '') {
+        this.isDeleting = false;
+        this.loopNum++;
+        delta = 500;
+        }
+
+        setTimeout(function() {
+        that.tick();
+        }, delta);
+    };
+
+    window.onload = function() {
+        document.getElementById('vid').play();
+        var elements = document.getElementsByClassName('typewrite');
+        for (var i=0; i<elements.length; i++) {
+            var toRotate = elements[i].getAttribute('data-type');
+            var period = elements[i].getAttribute('data-period');
+            if (toRotate) {
+              new TxtType(elements[i], JSON.parse(toRotate), period);
+            }
+        }
+    };
+</script>
+
+<style type="text/css">
+
+    .strikethrough {
+        display: inline-block;
+        position: relative;
+        transition: all 0.8s cubic-bezier(.55, 0, .1, 1);
+    }
+
+    .strikethrough:after {
+        content: '';
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: 4px;
+        box-shadow: 0 1px rgba(255,255,255,0.6);
+        margin-top: -0.6em;
+        background: white;
+        transform-origin: center left;
+        animation: strikethrough 1s 0.5s cubic-bezier(.55, 0, .1, 1) 1;
+        transition: transform 0.5s cubic-bezier(.55, 0, .1, 1);
+    }
+
+
+    /* Little hover effect */
+
+    .strikethrough:hover {
+        color: white;
+        background: gray;
+    }
+
+    .strikethrough:hover:after {
+        transform: scaleX(0);
+        transform-origin: center right;
+    }
+
+
+
+
+    /* Keyframes for initial animation */
+
+    @keyframes strikethrough {
+        from {
+            transform: scaleX(0);
+        }
+        to {
+            transform: scaleX(1);
+        }
+    }
+
+    p{
+        color:white;
+    }
+
+    .mobiledesc{
+        display: none;
+    }
+
+    @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+      .mainlogo {
+          width: 80%;
+          margin: auto;
+      }
+
+      #vid{
+        width: 100%;
+      }
+
+      .footer_logo{
+        width: 50%;
+          margin: auto;
+
+      }
+
+      .storymobile{
+          width: 95% !important;
+      }
+
+      .nomobiledesc{
+        display: none;
+    }
+
+    .mobiledesc{
+        display: flex !important;
+    }
+
+
+    }
+
+</style>
+
+{% include "djpaddle_paddlejs.html" %}
+{% include "djpaddle_post_checkout.html" %}
+
 
 </head>
+
+
 <body class="is-boxed has-animations">
+
+    
     <div class="body-wrap">
         <header class="site-header">
             <div class="container">
@@ -19,7 +192,7 @@
                     <div class="brand header-brand">
                         <h1 class="m-0">
 							<a href="#">
-								<img class="header-logo-image" src="dist/images/logo.svg" alt="Logo">
+								<img class="header-logo-image mainlogo" width="40%" height="40%" src="{% static 'scheduler/landing_page/images/progressboard_text.png'%}" alt="Logo">
                             </a>
                         </h1>
                     </div>
@@ -28,142 +201,462 @@
         </header>
 
         <main>
+
+            <!-- <div class="row content pt-3">
+                <div class="col-md-1">
+                  </div>
+
+                  <div class="col-md-4 pt-6" data-aos="fade-up">
+                    <h3>Assigment Teacher 2</h3>
+                    <ul>
+                      <li style="color: white;"><i class="icofont-check"></i> Teacher adds assignments .</li>
+                      <li style="color: white;"><i class="icofont-check"></i> Each assignment is added in particular course.</li>
+                      <li style="color: white;"><i class="icofont-check"></i> Review assignment as soon as student uploads it.</li>
+                    </ul>
+                  </div>
+
+                
+                <div class="col-md-6" data-aos="fade-left">
+                  <img src="{% static 'scheduler/landing_page/images/progressboard_ss_dash.png' %}" width="96%" style="border-radius: 25px; box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 1);" class="img-fluid" alt="">
+                </div> -->
+      
             <section class="hero">
-                <div class="container">
+                <div class="container" style="width: 100%;">
                     <div class="hero-inner">
 						<div class="hero-copy">
-	                        <h1 class="hero-title mt-0">Landing template for startups</h1>
-	                        <p class="hero-paragraph">Our landing page template works on all devices, so you only have to set it up once, and get beautiful results forever.</p>
-	                        <div class="hero-cta"><a class="button button-primary" href="#">Pre order now</a><a class="button" href="#">Get in touch</a></div>
+	                        <h1 class="hero-title mt-0">A <span class="strikethrough">Project</span>&nbsp;Progress Management Tool <br> for <a href="" class="typewrite" data-period="2000" data-type='[ "Makers.", "Indie Hackers.", "Developers."]'>
+                            </a></h1>
+	                        <p class="hero-paragraph">Finally a Progress Management Tool that takes your project to the end. Now never give up on that side project or an idea midway again.</p>
+	                        <div class="hero-cta"><a class="button button-primary" href="#pricing">Get started Now</a><a class="button" href="/demo">See Demo</a></div>
 						</div>
-						<div class="hero-figure anime-element">
-							<svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
-								<rect width="528" height="396" style="fill:transparent;" />
-							</svg>
-							<div class="hero-figure-box hero-figure-box-01" data-rotation="45deg"></div>
-							<div class="hero-figure-box hero-figure-box-02" data-rotation="-45deg"></div>
-							<div class="hero-figure-box hero-figure-box-03" data-rotation="0deg"></div>
-							<div class="hero-figure-box hero-figure-box-04" data-rotation="-135deg"></div>
-							<div class="hero-figure-box hero-figure-box-05"></div>
-							<div class="hero-figure-box hero-figure-box-06"></div>
-							<div class="hero-figure-box hero-figure-box-07"></div>
-							<div class="hero-figure-box hero-figure-box-08" data-rotation="-22deg"></div>
-							<div class="hero-figure-box hero-figure-box-09" data-rotation="-52deg"></div>
-							<div class="hero-figure-box hero-figure-box-10" data-rotation="-50deg"></div>
-						</div>
+						<div class="hero-figure">
+                            <!-- <img src="{% static 'scheduler/landing_page/images/progressboard_ss_dash.png' %}" width="200%" style="border-radius: 5px;box-shadow: 2px 0px 3px 5px #ffffff;border: white;" class="img-fluid" alt=""> -->
+                            <video id="vid" width="650" controls loop autoplay muted>
+                                <source src="https://naturescart.s3.ap-south-1.amazonaws.com/ProgressBoard_Video.mov" type="video/mp4">
+                                Your browser does not support the video tag.
+                              </video>
+                        </div>
                     </div>
                 </div>
             </section>
+            
+            <center>
+            <div class="card align-item-center storymobile" style="width: 70%; background-color: #1a202c; border-color: white;">
+                <div class="card-body" style="color: white;">
+                    <h6 class="storymobile" style="width: 90%; text-align: justify;"><strong>Have you ever started a project and then midway left it just because you found out some similar projects are available which are not completely similar but due to demotivation you forget your project’s USP?
+                        Or have you ever thought of having a much simpler and a light version of project management tool that is only targetted to Makers/Indepenedent Developers?
 
-            <section class="features section">
-                <div class="container">
+                </strong></h6>
+
+            </br>
+
+
+                <p style="width: 80%; text-align: justify;" class="storymobile">
+                    There are too many project management tools available out there, then why a new one? Ummmm, I don’t think anyone of them is yet targeted completely for independent developers or makers. I think we need a lighter tool. Currently the management tools are too heavy and does more than we want them to do. I think we needed a tool that focusses on the progress of the tool more than how the tasks are being implemented. We want a Progress Management Tool rather than a Project Management tool. 
+                </p>
+
+                <p style="width: 80%; text-align: justify;" class="storymobile">
+                    Taking a project from idea state to launch state is one hell of a task. I have worked on few side projects myself and scrapped them before launch. But since last 3 months I have been freelancing and during that time as my deadlines were tight I used to keep an excel sheet ( example below) to schedule all the tasks and also control the progress. But I think its easier when its freelancing to keep a simple spreadsheet as its not your product but when it’s your own product you need something more. Thus idea of ProgressBoard crossed my mind. 
+
+
+                </p>
+                <p style="width: 80%; text-align: justify;" class="storymobile">
+                    ProgressBoard - just like my spreadsheet scheduling with simple status for each task and no heavy features that anyway most of them don’t want to use or pay for. And on top of merging it with agile based point system, where each task has some point assigned and based on that the project’s progress will be tracked. 
+
+                </p>
+                {% comment %}
+                <p style="width: 80%; text-align: justify;" class="storymobile">
+                    But while creating a MVP, the other main problem is motivation. Usually when we start a project we get hyped up about the idea. And we want to get to it as fast as possible. We may sometime leave the project we are currently working on to start working on this new idea. And this cycle continues. Sooner or later we realise that Oh! this idea doesn’t seem much interesting now and we get onto something next which is great. 
+                </p>
+                <p style="width: 80%; text-align: justify;" class="storymobile">
+                    Thus keeping a deadline timer tick tocking in front of you with a progress bar showing how much is still left to motivate you. Also while we get the idea our motivations behind that ideas are super clear which might fade in some days so saving it at the time of project creation only and use them to remind yourself whenever you forget the main motivations and get going again.
+                </p>
+                {% endcomment %}
+                </div>
+              </div>
+            </center>
+        </br>
+            <section class="features section mt-30">
+                <div class="container mt-30">
+                    <h4 class="feature-title mt-30" style="text-align: center; margin-bottom: 5px !important; margin-top: 20px;">Why you should get ProgressBoard right now?</h4>
 					<div class="features-inner section-inner has-bottom-divider">
                         <div class="features-wrap">
+
+							<div class="feature text-center is-revealing">
+                                <div class="feature-inner">
+                                    <div class="feature-icon">
+										<i class="fas fa-list-ol fa-2x" style="color: #FFD54F;"></i>
+                                    </div>
+                                    <h4 class="feature-title mt-24" style="font-size:28px;">Manage your projects in a better way</h4>
+                                    <p class="mb-0 text-muted" style="font-size:14px; text-align: justify;">Create a modular project structure. With each project divided in different modules and further tasks.</p>
+                                </div>
+                            </div>
                             <div class="feature text-center is-revealing">
                                 <div class="feature-inner">
                                     <div class="feature-icon">
-										<img src="dist/images/feature-icon-01.svg" alt="Feature 01">
+										<i class="fas fa-asterisk fa-2x" style="color: #FFD54F;"></i>
                                     </div>
-                                    <h4 class="feature-title mt-24">Be Productive</h4>
-                                    <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                                    <h4 class="feature-title mt-24" style="font-size:28px;">Manage multiple projects with Dashboard</h4>
+                                    <p class="mb-0 text-muted" style="font-size:14px; text-align: justify;">Your dashboard keeps track progress of all projects, points scored today, total tasks in progress, priority tasks,etc.</p>
+                                </div>
+                            </div>
+
+                            <div class="feature text-center is-revealing">
+                                <div class="feature-inner">
+                                    <div class="feature-icon">
+										<i class="fas fa-tasks fa-2x" style="color: #FFD54F;"></i>
+                                    </div>
+                                    <h4 class="feature-title mt-24" style="font-size:28px;">A tool for independent indie makers only.</h4>
+                                    <p class="mb-0 text-muted" style="font-size:14px; text-align: justify;">Now its time to shift from generalized project management tool to a management tool dedicated only for makers.</p>
+                                </div>
+                            </div>
+                            <div class="feature text-center is-revealing">
+                                <div class="feature-inner">
+                                    <div class="feature-icon">
+										<i class="fas fa-trophy fa-2x" style="color: #FFD54F;"></i>
+                                    </div>
+                                    <h4 class="feature-title mt-24" style="font-size:28px;">Now complete your projects like its a game.</h4>
+                                    <p class="mb-0 text-muted" style="font-size:14px; text-align: justify;">With agile based points system, you can assign points to every task and when you complete a task you earn points.</p>
                                 </div>
                             </div>
 							<div class="feature text-center is-revealing">
                                 <div class="feature-inner">
                                     <div class="feature-icon">
-										<img src="dist/images/feature-icon-02.svg" alt="Feature 02">
+										<i class="fas fa-share-alt fa-2x" style="color: #FFD54F;"></i>
                                     </div>
-                                    <h4 class="feature-title mt-24">Be Productive</h4>
-                                    <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                                    <h4 class="feature-title mt-24" style="font-size:28px;">Share your project status with others.</h4>
+                                    <p class="mb-0 text-muted" style="font-size:14px; text-align: justify;">You can share your ProgressBoard project status with anyone even if they are not ProgressBoard users.</p>
                                 </div>
                             </div>
                             <div class="feature text-center is-revealing">
                                 <div class="feature-inner">
                                     <div class="feature-icon">
-										<img src="dist/images/feature-icon-03.svg" alt="Feature 03">
+										<i class="fas fa-clock fa-2x" style="color: #FFD54F;"></i>
                                     </div>
-                                    <h4 class="feature-title mt-24">Be Productive</h4>
-                                    <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
-                                </div>
-                            </div>
-                            <div class="feature text-center is-revealing">
-                                <div class="feature-inner">
-                                    <div class="feature-icon">
-										<img src="dist/images/feature-icon-04.svg" alt="Feature 04">
-                                    </div>
-                                    <h4 class="feature-title mt-24">Be Productive</h4>
-                                    <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
-                                </div>
-                            </div>
-							<div class="feature text-center is-revealing">
-                                <div class="feature-inner">
-                                    <div class="feature-icon">
-										<img src="dist/images/feature-icon-05.svg" alt="Feature 05">
-                                    </div>
-                                    <h4 class="feature-title mt-24">Be Productive</h4>
-                                    <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
-                                </div>
-                            </div>
-                            <div class="feature text-center is-revealing">
-                                <div class="feature-inner">
-                                    <div class="feature-icon">
-										<img src="dist/images/feature-icon-06.svg" alt="Feature 06">
-                                    </div>
-                                    <h4 class="feature-title mt-24">Be Productive</h4>
-                                    <p class="text-sm mb-0">Fermentum posuere urna nec tincidunt praesent semper feugiat nibh. A arcu cursus vitae congue mauris. Nam at lectus urna duis convallis. Mauris rhoncus aenean vel elit scelerisque mauris.</p>
+                                    <h4 class="feature-title mt-24" style="font-size:28px;">Your time starts now!!! Tick Tock</h4>
+                                    <p class="mb-0 text-muted" style="font-size:14px; text-align: justify;">When you see a deadline approaching or see you have done more than 50-60% of work you have more chances to complete that project.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+<!-- 
+            <center>
+            <div class="section-title" data-aos="fade-up" style="padding-bottom: 10px;">
+                <h2>Features</h2>
+              </div>
+            </center>
+       -->
 
-            <section class="pricing section">
+
+              <div class="row content" style="margin: auto;">
+                <div class="col-md-1">
+                  </div>
+
+                <div class="col-md-6" data-aos="fade-left">
+                  <img src="{% static 'scheduler/landing_page/images/Main_Dashboard.png' %}" width="96%" style="border-radius: 25px;box-shadow: 3px 0px 10px 5px #ffffff;border: white;" class="img-fluid" alt="">
+                </div>
+      
+                <div class="col-md-4 pt-5" data-aos="fade-up">
+                  <h3>Personal Dashboard</h3>
+                  <ul>
+                    <li style="color: white;"><i class="icofont-check"></i> See all the tasks done and in progress till now.</li>
+                    <li style="color: white;"><i class="icofont-check"></i> All the tasks marked as priority will be shown on dashboard.</li>
+                    <li style="color: white;"><i class="icofont-check"></i> Check progress of multiple projects together.</li>
+                    <li style="color: white;"><i class="icofont-check"></i> See how many points you scored today.</li>
+
+                  </ul>
+                </div>
+                <div class="col-md-1 pt-5" style="padding-right: 10px;" data-aos="fade-up">
+                </div>
+
+              </div>
+  
+              <div class="row content pt-5 nomobiledesc" style="margin: auto;">
+                <div class="col-md-1">
+                  </div>
+
+                  <div class="col-md-4 pt-5" data-aos="fade-up">
+                    <h3>Project Board</h3>
+                    <ul>
+                      <li style="color: white;"><i class="icofont-check"></i> Personal Management Board for each project .</li>
+                      <li style="color: white;"><i class="icofont-check"></i> See deadline countdown for continous motivation.</li>
+                      <li style="color: white;"><i class="icofont-check"></i> Share each project board to any umber of users.</li>
+                      <li style="color: white;"><i class="icofont-check"></i> Random new quote everytime.</li>
+                    </ul>
+                  </div>
+
+                  <div class="col-md-6" data-aos="fade-left">
+                    <img src="{% static 'scheduler/landing_page/images/ProjectBoard.png' %}" width="96%" style="border-radius: 25px;box-shadow: 3px 0px 10px 5px #ffffff;border: white;" class="img-fluid" alt="">
+                  </div>
+        
+
+               
+                  <div class="col-md-1 pt-5" style="padding-right: 10px;" data-aos="fade-up">
+                  </div>
+  
+                </div>
+
+                <!-- For Mobile -->
+
+                <div class="row content pt-5 mobiledesc" style="margin: auto;">
+                    <div class="col-md-1">
+                      </div>
+    
+                      <div class="col-md-6" data-aos="fade-left">
+                        <img src="{% static 'scheduler/landing_page/images/ProjectBoard.png' %}" width="96%" style="border-radius: 25px;box-shadow: 3px 0px 10px 5px #ffffff;border: white;" class="img-fluid" alt="">
+                      </div>
+            
+
+                      <div class="col-md-4 pt-5" data-aos="fade-up">
+                        <h3>Project Board</h3>
+                        <ul>
+                            <li style="color: white;"><i class="icofont-check"></i> Personal Management Board for each project .</li>
+                            <li style="color: white;"><i class="icofont-check"></i> See deadline countdown for continous motivation.</li>
+                            <li style="color: white;"><i class="icofont-check"></i> Share each project board to any umber of users.</li>
+                            <li style="color: white;"><i class="icofont-check"></i> Random new quote everytime.</li>
+                        </ul>
+                      </div>
+    
+
+    
+                   
+                      <div class="col-md-1 pt-5" style="padding-right: 10px;" data-aos="fade-up">
+                      </div>
+      
+                    </div>
+    <!-- End mobile -->
+
+                <div class="row content pt-5" style="margin: auto;">
+                    <div class="col-md-1">
+                      </div>
+
+                      <div class="col-md-6" data-aos="fade-left">
+                        <img src="{% static 'scheduler/landing_page/images/Modular_Structure.png' %}" width="96%" style="border-radius: 25px;box-shadow: 3px 0px 10px 5px #ffffff;border: white;" class="img-fluid" alt="">
+                      </div>
+            
+    
+                      <div class="col-md-4 pt-5" data-aos="fade-up">
+                        <h3>Modular Project Stucture</h3>
+                        <ul>
+                          <li style="color: white;"><i class="icofont-check"></i> Each project contains multiple modules for better structure.</li>
+                          <li style="color: white;"><i class="icofont-check"></i>Module wise progress shown.</li>
+                          <li style="color: white;"><i class="icofont-check"></i> Create unlimited number of tasks in each module.</li>
+                          <li style="color: white;"><i class="icofont-check"></i> 4 simple task status (Done/In Progress/Not Started/Cancel) for easy management.</li>
+                          <li style="color: white;"><i class="icofont-check"></i> Each task is assigned some points to act as an incentive to complete the task.</li>
+
+                        </ul>
+                      </div>
+                      <div class="col-md-1 pt-5" style="padding-right: 10px;" data-aos="fade-up">
+                      </div>
+      
+                    </div>
+                   
+                <div class="col-md-1" style="padding-right: 10px;" data-aos="fade-up">
+                </div>
+            </div>
+
+
+            <div class="pricing-inner section-inner" id="pricing">
+                <div class="pricing-header text-center">
+                    <h2 class="section-title mt-0">Now never leave your projects midway. Launch every product you create.</h2>
+                    <p class="section-paragraph mb-0 mt-1 text-muted">For very low monthly and yearly prices now you can get the most simple progress management tool out there.</p>
+                </div>
+
+              
+            <!-- <section class="pricing section">
                 <div class="container-sm">
                     <div class="pricing-inner section-inner">
                         <div class="pricing-header text-center">
                             <h2 class="section-title mt-0">Unlimited for all</h2>
                             <p class="section-paragraph mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut ad quis nostrud.</p>
                         </div>
-						<div class="pricing-tables-wrap">
-                            <div class="pricing-table">
-                                <div class="pricing-table-inner is-revealing">
-                                    <div class="pricing-table-main">
-                                        <div class="pricing-table-header pb-24">
-                                            <div class="pricing-table-price"><span class="pricing-table-price-currency h2">$</span><span class="pricing-table-price-amount h1">49</span><span class="text-xs">/month</span></div>
+                        <div class="row">
+
+                            <div class="pricing-tables-wrap">
+                                <div class="pricing-table">
+                                    <div class="pricing-table-inner is-revealing">
+                                        <div class="pricing-table-main">
+                                            <div class="pricing-table-header pb-24">
+                                                <div class="pricing-table-price"><span class="pricing-table-price-currency h2">$</span><span class="pricing-table-price-amount h1">49</span><span style="color: white;" class="text-xs">/month</span></div>
+                                            </div>
+                                            <div class="pricing-table-features-title text-xs pt-24 pb-24">What you will get</div>
+                                            <ul class="pricing-table-features list-reset text-xs">
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                            </ul>
                                         </div>
-										<div class="pricing-table-features-title text-xs pt-24 pb-24">What you will get</div>
-                                        <ul class="pricing-table-features list-reset text-xs">
-                                            <li>
-                                                <span>Lorem ipsum dolor sit nisi</span>
-                                            </li>
-                                            <li>
-                                                <span>Lorem ipsum dolor sit nisi</span>
-                                            </li>
-                                            <li>
-                                                <span>Lorem ipsum dolor sit nisi</span>
-                                            </li>
-											<li>
-												<span>Lorem ipsum dolor sit nisi</span>
-											</li>
-                                        </ul>
-                                    </div>
-                                    <div class="pricing-table-cta mb-8">
-                                        <a class="button button-primary button-shadow button-block" href="#">Pre order now</a>
+                                        <div class="pricing-table-cta mb-8">
+                                            <a class="button button-primary button-shadow button-block" href="#">Pre order now</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="pricing-tables-wrap pl-3">
+                                <div class="pricing-table">
+                                    <div class="pricing-table-inner is-revealing">
+                                        <div class="pricing-table-main">
+                                            <div class="pricing-table-header pb-24">
+                                                <div class="pricing-table-price"><spanstyle="color: white;" class="pricing-table-price-currency h2">$</span><spanstyle="color: white;" class="pricing-table-price-amount h1">49</span><span style="color: white;" class="text-xs">/month</span></div>
+                                            </div>
+                                            <div class="pricing-table-features-title text-xs pt-24 pb-24"  style="color: white;">What you will get</div>
+                                            <ul class="pricing-table-features list-reset text-xs">
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="pricing-table-cta mb-8">
+                                            <a class="button button-primary button-shadow button-block" href="#">Pre order now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pricing-tables-wrap pl-3">
+                                <div class="pricing-table">
+                                    <div class="pricing-table-inner is-revealing">
+                                        <div class="pricing-table-main">
+                                            <div class="pricing-table-header pb-24">
+                                                <div class="pricing-table-price"><spanstyle="color: white;" class="pricing-table-price-currency h2">$</span><spanstyle="color: white;" class="pricing-table-price-amount h1">49</span><span style="color: white;" class="text-xs">/month</span></div>
+                                            </div>
+                                            <div class="pricing-table-features-title text-xs pt-24 pb-24"  style="color: white;">What you will get</div>
+                                            <ul class="pricing-table-features list-reset text-xs">
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                                <li>
+                                                    <span style="color: white;">Lorem ipsum dolor sit nisi</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="pricing-table-cta mb-8">
+                                            <a class="button button-primary button-shadow button-block" href="#">Pre order now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
+
+
                     </div>
                 </div>
-            </section>
+            </section> -->
 
-			<section class="cta section">
+
+            <section class="pricing py-3">
+                <div class="container">
+                  <div class="row">
+                    <!-- Monthly Tier -->
+                    <div class="col-lg-4">
+                      <div class="card mb-5 mb-lg-0">
+                        <div class="card-body" style="background-color: black;">
+                          <h5 class="card-title text-center" style="color: white;">Monthly</h5>
+                          <h6 class="card-price text-center"><sup><span class="period">$</span></sup>9</h6>
+                          <h6 class="card-price text-center text-muted" style="font-size: 0.9rem;">Billed per month</h6>
+                          <hr>
+                          <ul class="fa-ul">
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Personal ProgressBoard</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Manage Unlimited Projects</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Share Project Status</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Unlimited Tasks</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Cancel Anytime</li>
+
+                        </ul>
+                          <a href="#!" class="btn btn-block btn-sm btn-primary paddle_button" style="background: #007bff !important; border: #007bff; color: white; width: 95%;" data-product="600821">Get Access!</a>
+
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Early Tier -->
+                    <div class="col-lg-4">
+                      <div class="card" style="border: 3px solid #00FFFF; ">
+                        <div class="card-body " style="background-color: black;">
+                          <h5 class="card-title text-center" style="color: white;">Early Bird!</h5>
+                          <h6 class="card-price text-center"><sup><span class="period">$</span></sup>49</h6>
+                          <h6 class="card-price text-center text-muted mb-5" style="font-size: 0.9rem;">Billed Annually!</h6>
+                          
+                          <!-- <p class="float-right text-muted" style="color: white; font-size: 14px; margin-bottom: 0px;">{{s_left}} slots left</p><br>
+                          <div class="progress mb-4" style=" height: 7px; width: 100%; margin: auto;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{s_left}}%" aria-valuenow="{{s_left}}" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div> -->
+                          <ul class="fa-ul">
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span><strong> 45% off Only for Today</strong></li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Personal ProgressBoard</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Manage Unlimited Projects</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Share Project Status</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Unlimited Tasks</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Cancel Anytime</li>
+ 
+                        </ul>
+                          <a href="#!" class="btn btn-block btn-sm btn-primary paddle_button" style="background-image: linear-gradient(45.34deg, #EA52F8 5.66%, #0066FF 94.35%); border: #007bff; color: white; width: 95%;" data-product="601207">Get Access!</a>
+
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Annual Tier -->
+                    <div class="col-lg-4">
+                      <div class="card">
+                        <div class="card-body" style="background-color: black;">
+                          <h5 class="card-title text-center" style="color: white;">Yearly</h5>
+                          <h6 class="card-price text-center"><sup><span class="period">$</span></sup>89</h6>
+                          <h6 class="card-price text-center text-muted" style="font-size: 0.9rem;">Billed Annually</h6>
+                          <hr>
+                          <ul class="fa-ul">
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Personal ProgressBoard</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Manage Unlimited Projects</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Share Project Status</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Unlimited Tasks</li>
+                            <li><span style="color: #00E676;" class="fa-li"><i class="fas fa-check"></i></span>Cancel Anytime</li>
+
+                        </ul>
+                          <a href="#!" class="btn btn-block btn-sm btn-primary paddle_button" style="background: #007bff !important; border: #007bff; color: white; width: 95%; height: 20%;" data-product="601073">Get Access!</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+
+
+
+
+            <section class="cta section">
 				<div class="container">
 					<div class="cta-inner section-inner">
-						<h3 class="section-title mt-0">Still not convinced on buying?</h3>
+						<h3 class="section-title mt-0">Have some doubts?</h3>
 						<div class="cta-cta">
-							<a class="button button-primary button-wide-mobile" href="#">Get in touch</a>
+							<a class="button button-primary button-wide-mobile" target="_blank" href="https://twitter.com/tanishsehgal">Let's Chat</a>
 						</div>
 					</div>
 				</div>
@@ -175,55 +668,50 @@
                 <div class="site-footer-inner">
                     <div class="brand footer-brand">
 						<a href="#">
-							<img class="header-logo-image" src="dist/images/logo.svg" alt="Logo">
+							<img class="header-logo-image footer_logo" width="30%" src="{% static 'scheduler/landing_page/images/progressboard_text.png'%}" alt="Logo">
 						</a>
                     </div>
-                    <ul class="footer-links list-reset">
+                    <!-- <ul class="footer-links list-reset">
                         <li>
-                            <a href="#">Contact</a>
+                            <a href="">Contact</a>
                         </li>
                         <li>
-                            <a href="#">About us</a>
+                            <a href="#">About me</a>
                         </li>
-                        <li>
-                            <a href="#">FAQ's</a>
-                        </li>
-                        <li>
-                            <a href="#">Support</a>
-                        </li>
-                    </ul>
+                      
+                    </ul> -->
                     <ul class="footer-social-links list-reset">
-                        <li>
+                        <!-- <li>
                             <a href="#">
                                 <span class="screen-reader-text">Facebook</span>
                                 <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6.023 16L6 9H3V6h3V4c0-2.7 1.672-4 4.08-4 1.153 0 2.144.086 2.433.124v2.821h-1.67c-1.31 0-1.563.623-1.563 1.536V6H13l-1 3H9.28v7H6.023z" fill="#0270D7"/>
                                 </svg>
                             </a>
-                        </li>
+                        </li> -->
                         <li>
-                            <a href="#">
+                            <a href="https://twitter.com/tanishsehgal" target="_blank">
                                 <span class="screen-reader-text">Twitter</span>
                                 <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M16 3c-.6.3-1.2.4-1.9.5.7-.4 1.2-1 1.4-1.8-.6.4-1.3.6-2.1.8-.6-.6-1.5-1-2.4-1-1.7 0-3.2 1.5-3.2 3.3 0 .3 0 .5.1.7-2.7-.1-5.2-1.4-6.8-3.4-.3.5-.4 1-.4 1.7 0 1.1.6 2.1 1.5 2.7-.5 0-1-.2-1.5-.4C.7 7.7 1.8 9 3.3 9.3c-.3.1-.6.1-.9.1-.2 0-.4 0-.6-.1.4 1.3 1.6 2.3 3.1 2.3-1.1.9-2.5 1.4-4.1 1.4H0c1.5.9 3.2 1.5 5 1.5 6 0 9.3-5 9.3-9.3v-.4C15 4.3 15.6 3.7 16 3z" fill="#0270D7"/>
                                 </svg>
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#">
                                 <span class="screen-reader-text">Google</span>
                                 <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M7.9 7v2.4H12c-.2 1-1.2 3-4 3-2.4 0-4.3-2-4.3-4.4 0-2.4 2-4.4 4.3-4.4 1.4 0 2.3.6 2.8 1.1l1.9-1.8C11.5 1.7 9.9 1 8 1 4.1 1 1 4.1 1 8s3.1 7 7 7c4 0 6.7-2.8 6.7-6.8 0-.5 0-.8-.1-1.2H7.9z" fill="#0270D7"/>
                                 </svg>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
-                    <div class="footer-copyright">&copy; 2019 Solid, all rights reserved</div>
+                    <div class="footer-copyright">&copy; 2020 Made by &nbsp;<a href="https://twitter.com/tanishsehgal" target="_blank">Tanish Sehgal</a></div>
                 </div>
             </div>
         </footer>
     </div>
 
-    <script src="dist/js/main.min.js"></script>
+    <script src="{% static 'scheduler/landing_page/js/main.min.js'%}"></script>
 </body>
 </html>

@@ -56,13 +56,15 @@ class project_module(models.Model):
 class project_task(models.Model):
 
     module = models.ForeignKey(project_module, on_delete=models.CASCADE)
-    task_name = models.CharField(max_length=5000, default="Try")
+    task_name = models.CharField(max_length=5000)
     status = models.CharField(choices=STATUS_CHOICES,max_length=2, default='C2')
     points = models.IntegerField()
     priority_task = models.CharField(choices=PRIORITY_CHOICES,max_length=2, default='N')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
+class slot_left(models.Model):
+    left = models.IntegerField()
 
    
 
