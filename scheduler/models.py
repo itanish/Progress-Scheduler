@@ -25,7 +25,6 @@ class pre_launch_email(models.Model):
     #progress_percent = models.FloatField(default=0)
     
 
-
 def generate_random_url(someparam):
     print(someparam)
     return ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=15))

@@ -185,21 +185,28 @@ var TxtType = function(el, toRotate, period) {
 
 <body class="is-boxed has-animations">
 
+    <nav class="navbar navbar-expand-lg justify-content-between" style="background-color:#000;>
+        <a class="navbar-brand" href="/">
+          <img src="{% static 'scheduler/landing_page/images/progressboard_text.png'%}" width="20%" class="d-inline-block align-top" alt="">
+          <!-- <span style="color: azure; font-size: 25px;">Bootstrap</span> -->
+        </a>
+          <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContentLG" aria-controls="navbarSupportedContentLG" aria-expanded="true" aria-label="Toggle navigation" style="background-color:#0062cc">
+              <span class="navbar-toggler-icon"></span>
+          </button> -->
+          <div class="navbar" id="navbarSupportedContentLG">
+              <ul class="navbar-nav ml-auto">
+                  <li class="nav-item active">
+                  <li class="nav-item">
+                      <a class="button button-primary" href="/app">Login</a> <!--<span class="material-icons" style="padding-top:3px;font-size:20px;color:white">laptop</span>&nbsp;-->
+                  </li>
+                  <li>
+      
+              </ul>
+          </div>
+      </nav>
+      
     
     <div class="body-wrap">
-        <header class="site-header">
-            <div class="container">
-                <div class="site-header-inner">
-                    <div class="brand header-brand">
-                        <h1 class="m-0">
-							<a href="#">
-								<img class="header-logo-image mainlogo" width="40%" height="40%" src="{% static 'scheduler/landing_page/images/progressboard_text.png'%}" alt="Logo">
-                            </a>
-                        </h1>
-                    </div>
-                </div>
-            </div>
-        </header>
 
         <main>
 
@@ -240,8 +247,30 @@ var TxtType = function(el, toRotate, period) {
                     </div>
                 </div>
             </section>
-            
+            </br>
+
             <center>
+
+                <div style="  height: 90px;
+                position: relative;
+              ">
+              <div class="row" style="  margin: 0;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              -ms-transform: translate(-50%, -50%);
+              transform: translate(-50%, -50%);
+            ">
+
+                    <a href="https://www.producthunt.com/posts/progressboard?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-progressboard" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=221103&theme=dark" alt="ProgressBoard - The most simple Project Management Tool Ever. | Product Hunt Embed" style="width: 300px; height: 70px;" width="250px" height="54px" /></a>
+                
+                    <a href='https://www.remote.tools/product/progressboard?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-featured' target='_blank'><img src='https://remote-tools.s3-us-west-2.amazonaws.com/rt_badge/5/Dark.svg' alt='ProgressBoard' style='width: 280px; height: 65px;' width='250px' height='54px'/></a>  
+    
+                </div>
+
+                </div>
+               
+                <br>
             <div class="card align-item-center storymobile" style="width: 70%; background-color: #1a202c; border-color: white;">
                 <div class="card-body" style="color: white;">
                     <h6 class="storymobile" style="width: 90%; text-align: justify;"><strong>Have you ever started a project and then midway left it just because you found out some similar projects are available which are not completely similar but due to demotivation you forget your project’s USP?

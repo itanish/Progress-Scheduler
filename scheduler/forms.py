@@ -36,6 +36,7 @@ class add_module_form(forms.ModelForm):
         }
         
 
+
 class add_task_form(forms.ModelForm):
 
     class Meta:
